@@ -10,7 +10,7 @@ const headingFont = localFont({
 export default function TrelloIcon() {
   return (
     <Link href='/'>
-      <div className='hover:opacity-75 transition items-center gap-x-2 hidden md:flex'>
+      <div className='hover:opacity-75 transition items-center h-full gap-x-2 hidden md:flex'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='30'
@@ -28,7 +28,7 @@ export default function TrelloIcon() {
           <path d='M14 7h3v6h-3z' />
         </svg>
         <p
-          className={cn('text-lg text-neutral-700 pb-1', headingFont.className)}
+          className={cn('text-lg text-neutral-700 flex pt-1', headingFont.className)}
         >
           Taskify
         </p>

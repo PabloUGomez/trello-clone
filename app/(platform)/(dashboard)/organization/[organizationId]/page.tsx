@@ -1,38 +1,21 @@
+import { createBoard } from '@/actions/createBoard'
+import { Button } from '@/components/ui/button'
 import { prisma } from '@/lib/db'
+import { Form } from './form'
 
-const OrganizationPage = () => {
-  async function createBoard(formData: FormData) {
-    'use server'
-
-    const title = formData.get('title') as string
-    if (!title) {
-      throw new Error('Title is required')
-    }
-
-    try {
-      const board = await prisma.board.create({
-        data: {
-          title: title,
-        },
-      })
-      console.log('Board created:', board)
-    } catch (error) {
-      console.error('Error creating board:', error)
-    }
-  }
+const OrganizationPage = async () => {
+  const boards = await prisma.board.findMany()
 
   return (
-    <div>
-      <form action={createBoard}>
-        <input
-          type='text'
-          id='title'
-          name='title'
-          required
-          placeholder='Enter Board title'
-          className='border-black'
-        />
-      </form>
+    <div className='flex flex-col space-y-4'>
+      <Form />
+      <div className='space-y-2'>
+        {boards.map((board) => (
+          <div key={board.id} className='flex justify-between'>
+            <div>Board name:{board.title}</div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

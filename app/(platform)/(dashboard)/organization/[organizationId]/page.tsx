@@ -1,4 +1,4 @@
-import { createBoard } from '@/actions/createBoard'
+import { createBoard } from '@/actions/create-board'
 import { Button } from '@/components/ui/button'
 import { prisma } from '@/lib/db'
 import { Form } from './form'

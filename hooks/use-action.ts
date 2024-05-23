@@ -1,7 +1,6 @@
-import { useState, useCallback, act } from 'react'
+import { useState, useCallback } from 'react'
 
 import { ActionState, FieldErrors } from '@/lib/create-safe-action'
-import { set } from 'zod'
 
 type Action<TInput, TOutput> = (
   data: TInput

@@ -1,11 +1,12 @@
 'use client'
 
 import { createBoard } from '@/actions/create-board'
+import { FormInput } from '@/components/form/form-input'
 import { Button } from '@/components/ui/button'
 import { useAction } from '@/hooks/use-action'
 
 export const Form = () => {
-  const { execute } = useAction(createBoard, {
+  const { execute, fieldErrors } = useAction(createBoard, {
     onSuccess: () => {
       console.log('Board created')
     },
@@ -24,13 +25,8 @@ export const Form = () => {
     <div className='flex flex-col space-y-4'>
       <form action={onSubmit}>
         <div className='flex flex-col space-y-2'>
-          <input
-            type='text'
-            id='title'
-            name='title'
-            required
-            placeholder='Enter Board title'
-            className='border-black'
+          <FormInput id='title' errors={fieldErrors} 
+          label='Board Title' placeholder='Enter board title'
           />
         </div>
         <Button type='submit'>Submit</Button>

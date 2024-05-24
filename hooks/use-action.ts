@@ -30,9 +30,7 @@ export const useAction = <TInput, TOutput>(
       try {
         const result = await action(data)
         if (!result) return
-        if (result.fieldErrors) {
-          setFieldErrors(result.fieldErrors)
-        }
+        setFieldErrors(result.fieldErrors)
         if (result.error) {
           setError(result.error)
           options.onError?.(result.error)

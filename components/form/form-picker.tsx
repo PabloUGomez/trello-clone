@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import { unsplash } from '@/lib/unsplash'
-import { Result } from 'postcss'
-import { Loader2 } from 'lucide-react'
+import { Check, Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
+import { defaultImages } from '@/constants/images'
+import Link from 'next/link'
+import { FormErrors } from './form-errors'
 
 interface FormPickerProps {
   id: string
@@ -16,7 +18,8 @@ interface FormPickerProps {
 export const FromPicker = ({ id, errors }: FormPickerProps) => {
   const { pending } = useFormStatus()
 
-  const [images, setImages] = useState<Array<Record<string, any>>>([])
+  const [images, setImages] =
+    useState<Array<Record<string, any>>>(defaultImages)
   const [isLoading, setIsLoading] = useState(true)
   const [selectedImageId, setSelectedImageId] = useState(null)
 
@@ -35,6 +38,7 @@ export const FromPicker = ({ id, errors }: FormPickerProps) => {
         }
       } catch (error) {
         console.error(error)
+        setImages(defaultImages)
       } finally {
         setIsLoading(false)
       }
@@ -63,17 +67,41 @@ export const FromPicker = ({ id, errors }: FormPickerProps) => {
             onClick={() => {
               if (pending) return
               setSelectedImageId(image.id)
+              console.log(selectedImageId);
             }}
           >
+            <input
+              type='radio'
+              id={id}
+              name={id}
+              checked={selectedImageId === image.id}
+              onChange={() => setSelectedImageId(image.id)}
+              className='hidden'
+              disabled={pending}
+              value={`${image.id}|${image.urls.thumb}|${image.urls.full}|${image.links.html}|${image.user.name}|`}
+            />
             <Image
               fill
               src={image.urls.thumb}
               alt='Unsplash image'
               className='object-cover rounded-sm'
             />
+            {selectedImageId === image.id && (
+              <div className='absolute inset-y-0 h-full w-full bg-black/30 flex items-center justify-center'>
+                <Check className='h-4 w-4 text-white' />
+              </div>
+            )}
+            <Link
+              href={image.links.html}
+              target='_blank'
+              className='opacity-0 group-hover:opacity-100 absolute bottom-0 z-10 w-full text-[10px] truncate text-white hover:underline p-1 bg-black/55'
+            >
+              {image.user.name}
+            </Link>
           </div>
         ))}
       </div>
+      <FormErrors id='image' errors={errors} />
     </div>
   )
 }

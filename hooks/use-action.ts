@@ -21,11 +21,11 @@ export const useAction = <TInput, TOutput>(
   >(undefined)
   const [error, setError] = useState<string | undefined>(undefined)
   const [data, setData] = useState<TOutput | undefined>(undefined)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const execute = useCallback(
     async (data: TInput) => {
-      setLoading(true)
+      setIsLoading(true)
 
       try {
         const result = await action(data)
@@ -40,7 +40,7 @@ export const useAction = <TInput, TOutput>(
           options.onSuccess?.(result.data)
         }
       } finally {
-        setLoading(false)
+        setIsLoading(false)
         options.onComplete?.()
       }
     },
@@ -51,7 +51,7 @@ export const useAction = <TInput, TOutput>(
     fieldErrors,
     error,
     data,
-    loading,
+    isLoading,
     execute,
   }
 }

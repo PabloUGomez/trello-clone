@@ -7,12 +7,14 @@ import { FormInput } from '@/components/form/form-input'
 import { useAction } from '@/hooks/use-action'
 import { updateList } from '@/actions/update-list'
 import { toast } from 'sonner'
+import { ListOptions } from './list-options'
 
 interface ListHeaderProps {
   data: List
+  onAddCard: () => void
 }
 
-export const ListHeader = ({ data }: ListHeaderProps) => {
+export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
   const [title, setTitle] = useState(data.title)
   const [isEditing, setIsEditing] = useState(false)
   const inputRef = useRef<ElementRef<'input'>>(null)
@@ -71,7 +73,7 @@ export const ListHeader = ({ data }: ListHeaderProps) => {
       {isEditing ? (
         <form action={onSubmit} ref={formRef} className='flex-1 px-[2px]'>
           <input hidden id='id' name='id' value={data.id} />
-          <input hidden id='boardId' value={data.boardId} />
+          <input hidden id='boardId' name='boardId' value={data.boardId} />
           <FormInput
             ref={inputRef}
             id='title'
@@ -90,6 +92,7 @@ export const ListHeader = ({ data }: ListHeaderProps) => {
           {title}
         </div>
       )}
+      <ListOptions data={data} onAddCard={onAddCard} />
     </div>
   )
 }

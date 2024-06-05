@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.8",
+    "@hello-pangea/dnd": "^16.6.0",
     "@libsql/client": "^0.6.0",
     "@prisma/adapter-libsql": "^5.14.0",
     "@prisma/client": "^5.14.0",

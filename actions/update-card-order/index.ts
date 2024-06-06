@@ -32,6 +32,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         },
         data: {
           order: item.order,
+          listId: item.listId,
         },
       })
     )

@@ -6,7 +6,10 @@ import { useEffect, useState } from 'react'
 import { ListItem } from './list-item'
 
 import { DragDropContext, Droppable } from '@hello-pangea/dnd'
-import { set } from 'lodash'
+
+import { useAction } from '@/hooks/use-action'
+import { updateListOrder } from '@/actions/update-order-list'
+import { toast } from 'sonner'
 
 interface ListContainerProps {
   boardId: string
@@ -23,13 +26,20 @@ function reOrder<T>(list: T[], startIndex: number, endIndex: number) {
 export const ListContainer = ({ boardId, data }: ListContainerProps) => {
   const [orderData, setOrderData] = useState(data)
 
+  const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
+    onSuccess: () => {
+      toast.success('List order updated')
+    },
+    onError: () => {
+      toast.error('Error updating list order')
+    },
+  })
+
   useEffect(() => {
     setOrderData(data)
   }, [data])
 
-  const onDragEnd = (
-    result: any,
-  ) => {
+  const onDragEnd = (result: any) => {
     const { source, destination, type } = result
     if (!destination) return
 
@@ -51,7 +61,10 @@ export const ListContainer = ({ boardId, data }: ListContainerProps) => {
         }
       )
       setOrderData(items)
-      //TODO: Update order in the backend
+      executeUpdateListOrder({
+        items,
+        boardId,
+      })
     }
     //User moved card
     if (type === 'card') {

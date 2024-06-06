@@ -5,8 +5,8 @@ export const UpdateOrderList = z.object({
     id: z.string(),
     title: z.string(),
     order: z.number(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
   })),
   boardId: z.string(),
 })

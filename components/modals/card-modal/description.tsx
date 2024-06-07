@@ -20,7 +20,6 @@ interface DescriptionProps {
 
 export const Description = ({ data }: DescriptionProps) => {
   const [isEditing, setIsEditing] = useState(false)
-  const [description, setDescription] = useState(data.description)
 
   const textAreaRef = useRef<ElementRef<'textarea'>>(null)
   const formRef = useRef<ElementRef<'form'>>(null)
@@ -54,7 +53,6 @@ export const Description = ({ data }: DescriptionProps) => {
       queryClient.invalidateQueries({
         queryKey: ['card', data.id],
       })
-      setDescription(data.description)
       disableEditing()
     },
     onError: () => {
@@ -79,7 +77,7 @@ export const Description = ({ data }: DescriptionProps) => {
             <FormTextarea
               ref={textAreaRef}
               id='description'
-              defaultValue={description || undefined}
+              defaultValue={data.description || undefined}
               className='w-full mt-2'
               placeholder='Add a more detailed description'
               errors={fieldErrors}
@@ -102,7 +100,7 @@ export const Description = ({ data }: DescriptionProps) => {
             role='button'
             onClick={enableEditing}
           >
-            {description || 'Add a more detailed description'}
+            {data.description || 'Add a more detailed description'}
           </div>
         )}
       </div>

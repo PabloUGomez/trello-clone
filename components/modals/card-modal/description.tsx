@@ -48,7 +48,7 @@ export const Description = ({ data }: DescriptionProps) => {
   useEventListener('keydown', onKeyDown)
   useOnClickOutside(formRef, disableEditing)
 
-  const { execute } = useAction(updateCard, {
+  const { execute, fieldErrors } = useAction(updateCard, {
     onSuccess: () => {
       toast.success('Card description updated')
       queryClient.invalidateQueries({
@@ -82,11 +82,12 @@ export const Description = ({ data }: DescriptionProps) => {
               defaultValue={description || undefined}
               className='w-full mt-2'
               placeholder='Add a more detailed description'
+              errors={fieldErrors}
             />
             <div className='flex items-center gap-x-2'>
               <FormSubmit>Save</FormSubmit>
               <Button
-                type='submit'
+                type='button'
                 size='sm'
                 variant='ghost'
                 onClick={disableEditing}

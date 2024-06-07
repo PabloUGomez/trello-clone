@@ -66,13 +66,9 @@ export const Description = ({ data }: DescriptionProps) => {
     const description = formData.get('description') as string
     const boardId = params.boardId as string
 
-    if (description === data.description) {
-      return
-    }
-
     execute({ description, id: data.id, boardId })
   }
-
+  console.log('hola');
   return (
     <div className='flex items-start gap-x-3 w-full'>
       <AlignLeft className='h-5 w-5 mt-1.5 text-neutral-700' />
@@ -90,7 +86,7 @@ export const Description = ({ data }: DescriptionProps) => {
             <div className='flex items-center gap-x-2'>
               <FormSubmit>Save</FormSubmit>
               <Button
-                type='button'
+                type='submit'
                 size='sm'
                 variant='ghost'
                 onClick={disableEditing}

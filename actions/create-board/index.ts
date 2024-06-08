@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { createSafeAction } from '@/lib/create-safe-action'
 import { CreateBoard } from './schema'
 import { createAuditLog } from '@/lib/create-audit-log'
+import { incrementAvailableCount, hasAvailableCount } from '@/lib/org-limit'
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth()
@@ -14,6 +15,15 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   if (!userId) {
     return {
       error: 'Unauthorized',
+    }
+  }
+
+  const canCreate = await hasAvailableCount()
+
+  if (!canCreate) {
+    return {
+      error:
+        'You have reached your limit of free boards. Please upgrade to create more.',
     }
   }
 
@@ -58,6 +68,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       action: 'CREATE',
       entityTitle: board.title,
     })
+
+    await incrementAvailableCount()
   } catch (error) {
     console.error(error)
     return {

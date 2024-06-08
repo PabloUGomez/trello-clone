@@ -49,10 +49,13 @@ export const Description = ({ data }: DescriptionProps) => {
 
   const { execute, fieldErrors } = useAction(updateCard, {
     onSuccess: () => {
-      toast.success('Card description updated')
       queryClient.invalidateQueries({
         queryKey: ['card', data.id],
       })
+      queryClient.invalidateQueries({
+        queryKey: ['card-logs', data.id],
+      })
+      toast.success('Card description updated')
       disableEditing()
     },
     onError: () => {
@@ -66,7 +69,7 @@ export const Description = ({ data }: DescriptionProps) => {
 
     execute({ description, id: data.id, boardId })
   }
-  console.log('hola');
+  console.log('hola')
   return (
     <div className='flex items-start gap-x-3 w-full'>
       <AlignLeft className='h-5 w-5 mt-1.5 text-neutral-700' />

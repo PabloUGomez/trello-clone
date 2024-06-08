@@ -6,6 +6,7 @@ import { prisma } from '@/lib/db'
 import { revalidatePath } from 'next/cache'
 import { createSafeAction } from '@/lib/create-safe-action'
 import { CreateCard } from './schema'
+import { createAuditLog } from '@/lib/create-audit-log'
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth()
@@ -54,6 +55,14 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         order: newOrder,
       },
     })
+
+    await createAuditLog({
+      entityId: card.id,
+      entityType: 'CARD',
+      action: 'CREATE',
+      entityTitle: card.title,
+    })
+
   } catch (error) {
     return {
       error: 'Failed to update board',

@@ -6,6 +6,7 @@ import { prisma } from '@/lib/db'
 import { revalidatePath } from 'next/cache'
 import { createSafeAction } from '@/lib/create-safe-action'
 import { CreateBoard } from './schema'
+import { createAuditLog } from '@/lib/create-audit-log'
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth()
@@ -21,8 +22,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   const [imageId, imageThumbUrl, imageFullUrl, imageUserName, imageLinkHTML] =
     image.split('|')
 
-  console.log(orgId);
-  
+  console.log(orgId)
 
   if (
     !imageId ||
@@ -36,7 +36,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       error: 'Missing fields. Failed to create board.',
     }
   }
-  
+
   let board
 
   try {
@@ -50,6 +50,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         imageUserName,
         imageLinkHTML,
       },
+    })
+
+    await createAuditLog({
+      entityId: board.id,
+      entityType: 'BOARD',
+      action: 'CREATE',
+      entityTitle: board.title,
     })
   } catch (error) {
     console.error(error)

@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { createSafeAction } from '@/lib/create-safe-action'
 import { DeleteBoard } from './schema'
 import { redirect } from 'next/navigation'
+import { createAuditLog } from '@/lib/create-audit-log'
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth()
@@ -16,7 +17,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       error: 'Unauthorized',
     }
   }
-  const {id } = data
+  const { id } = data
   let board
 
   try {
@@ -24,7 +25,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       where: {
         id,
         orgId,
-      }
+      },
+    })
+    await createAuditLog({
+      entityId: board.id,
+      entityType: 'BOARD',
+      action: 'DELETE',
+      entityTitle: board.title,
     })
   } catch (error) {
     return {

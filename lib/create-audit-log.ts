@@ -1,10 +1,11 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { prisma } from './db'
+import { ACTION, ENTITY_TYPE } from '@/types'
 
 interface Props {
   entityId: string
-  entityType: 'BOARD' | 'LIST' | 'CARD'
-  action: 'CREATE' | 'UPDATE' | 'DELETE'
+  entityType: ENTITY_TYPE
+  action: ACTION
   entityTitle: string
 }
 

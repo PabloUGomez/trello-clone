@@ -16,7 +16,7 @@ export const ActivityItem = ({ log }: ActivityProps) => {
       <div className='flex flex-col space-x-0.5'>
         <p className='text-sm text-muted-foreground'>
           <span className='font-semibold lowercase text-neutral-700'>
-            {log.userName}
+            {`${log.userName} `}
           </span>
           {generateLogMessage(log)}
         </p>

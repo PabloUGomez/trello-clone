@@ -9,6 +9,7 @@ import { DeleteBoard } from './schema'
 import { redirect } from 'next/navigation'
 import { createAuditLog } from '@/lib/create-audit-log'
 import { decreseAvailableCount } from '@/lib/org-limit'
+import { checkSubscription } from '@/lib/subscription'
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth()
@@ -18,6 +19,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       error: 'Unauthorized',
     }
   }
+  const isPro = await checkSubscription()
   const { id } = data
   let board
 
@@ -35,8 +37,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       entityTitle: board.title,
     })
 
-    await decreseAvailableCount()
-    
+    if (!isPro) {
+      await decreseAvailableCount()
+    }
   } catch (error) {
     return {
       error: 'Failed to delete board',

@@ -10,7 +10,7 @@ export const checkSubscription = async () => {
     return false
   }
 
-  const orgSubscription = await prisma.orgSubscription.findFirst({
+  const orgSubscription = await prisma.orgSubscription.findUnique({
     where: {
       orgId,
     },

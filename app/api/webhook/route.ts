@@ -5,8 +5,8 @@ import { stripe } from '@/lib/stripe'
 import { prisma } from '@/lib/db'
 
 export async function POST(req: Request) {
-  const body = await req.json()
-  const sig = req.headers.get('stripe-signature') as string
+  const body = await req.text()
+  const sig = headers().get('Stripe-Signature') as string
 
   let event: Stripe.Event
 
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     }
     await prisma.orgSubscription.create({
       data: {
-        orgId: session.metadata.orgId,
+        orgId: session?.metadata.orgId,
         stripeSubscriptionId: orgSubscription.id,
         stripeCostumerId: orgSubscription.customer as string,
         stripePriceId: orgSubscription.items.data[0].price.id,
